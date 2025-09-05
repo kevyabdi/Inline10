@@ -54,11 +54,11 @@ async def inline_query_handler(client: Client, query: InlineQuery):
         await query.answer(results=results, cache_time=0, is_personal=True)
         return
 
-    # ✅ Empty query → show recent media (all types)
+    # ✅ Empty query → show recent videos (10 latest)
     if not search_query:
         try:
-            # Use recent_media instead of just videos to avoid content type issues
-            recent_media = await client.db.get_recent_media(limit=15)
+            # Show 10 latest videos when no search query is provided
+            recent_media = await client.db.get_recent_videos(limit=10)
             results = []
             if recent_media:
                 for idx, media in enumerate(recent_media):
@@ -74,12 +74,12 @@ async def inline_query_handler(client: Client, query: InlineQuery):
             if not results:
                 results = [
                     InlineQueryResultArticle(
-                        id="no_media",
-                        title="📁 No Recent Media",
-                        description="Upload media to channels to see them here",
+                        id="no_videos",
+                        title="🎬 No Recent Videos",
+                        description="Upload videos to channels to see them here",
                         input_message_content=InputTextMessageContent(
-                            "📁 <b>No recent media found</b>\n\n"
-                            "Recent media will appear here when you upload them.\n"
+                            "🎬 <b>No recent videos found</b>\n\n"
+                            "Recent videos will appear here when you upload them.\n"
                             "Type a search term to find specific content."
                         )
                     )
