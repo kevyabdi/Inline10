@@ -122,11 +122,12 @@ def format_file_size(size_bytes: int) -> str:
     
     size_names = ["B", "KB", "MB", "GB", "TB"]
     i = 0
-    while size_bytes >= 1024 and i < len(size_names) - 1:
-        size_bytes /= 1024.0
+    size_value = float(size_bytes)
+    while size_value >= 1024 and i < len(size_names) - 1:
+        size_value /= 1024.0
         i += 1
     
-    return f"{size_bytes:.1f} {size_names[i]}"
+    return f"{size_value:.1f} {size_names[i]}"
 
 def get_file_type_emoji(file_type: str) -> str:
     """Get emoji for file type"""
