@@ -13,7 +13,7 @@ class Config:
     
     # Database configuration
     DATABASE_URI = os.getenv("DATABASE_URI", "mongodb+srv://kevyabdi30:kevyabdi30@kevyabdi.mymiztp.mongodb.net/?retryWrites=true&w=majority&appName=kevyabdi")
-    DATABASE_NAME = os.getenv("DATABASE_NAME", "Kevyabdi30")
+    DATABASE_NAME = os.getenv("DATABASE_NAME", "kevyabdi30")
     COLLECTION_NAME = os.getenv("COLLECTION_NAME", "media")
     
     # Bot configuration
