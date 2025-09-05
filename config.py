@@ -7,18 +7,18 @@ from typing import List
 
 class Config:
     # Telegram API credentials
-    API_ID = int(os.getenv("API_ID", "27965918"))
-    API_HASH = os.getenv("API_HASH", "d5ca408334552615fa7e8f48c2dac999")
-    BOT_TOKEN = os.getenv("BOT_TOKEN", "8271624089:AAHlzYjTKlLroUhk9GMVzXcnOyTnjWyxtVA")
+    API_ID = int(os.getenv("API_ID", ""))
+    API_HASH = os.getenv("API_HASH", "")
+    BOT_TOKEN = os.getenv("BOT_TOKEN", "")
     
     # Database configuration
-    DATABASE_URI = os.getenv("DATABASE_URI", "mongodb+srv://kevyabdi30:kevyabdi30@kevyabdi.mymiztp.mongodb.net/?retryWrites=true&w=majority&appName=kevyabdi")
-    DATABASE_NAME = os.getenv("DATABASE_NAME", "kevyabdi30")
+    DATABASE_URI = os.getenv("DATABASE_URI", "")
+    DATABASE_NAME = os.getenv("DATABASE_NAME", "")
     COLLECTION_NAME = os.getenv("COLLECTION_NAME", "media")
     
     # Bot configuration
-    ADMINS = [int(x) for x in os.getenv("ADMINS", "1096693642").split() if x.strip()]
-    CHANNELS = [int(x) for x in os.getenv("CHANNELS", "-1001981747992").split() if x.strip()]
+    ADMINS = [int(x) for x in os.getenv("ADMINS", "").split() if x.strip()]
+    CHANNELS = [int(x) for x in os.getenv("CHANNELS", "").split() if x.strip()]
     AUTH_CHANNEL = int(os.getenv("AUTH_CHANNEL", "0")) if os.getenv("AUTH_CHANNEL") else None
     AUTH_USERS = [int(x) for x in os.getenv("AUTH_USERS", "").split() if x.strip()]
     
