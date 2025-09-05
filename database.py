@@ -64,7 +64,7 @@ class Database:
             logger.error(f"Error saving media: {e}")
             return False
     
-    async async def search_media(self, query: str, file_type: str = None) -> List[Dict[str, Any]]:
+    async def search_media(self, query: str, file_type: str = None) -> List[Dict[str, Any]]:
         """Search media by query with optimization for large datasets"""
         try:
             # Create search filter
@@ -167,7 +167,7 @@ class Database:
             logger.error(f"Error getting total size: {e}")
             return 0
     
-    async async def get_recent_media(self, limit: int = 25) -> List[Dict[str, Any]]:
+    async def get_recent_media(self, limit: int = 25) -> List[Dict[str, Any]]:
         """Get recent media files, optimized for large collections"""
         try:
             # Use compound index for better performance on large collections
@@ -211,7 +211,7 @@ class Database:
             logger.error(f"Error getting recent media: {e}")
             return []
     
-    async async def get_recent_videos(self, limit: int = 10) -> List[Dict[str, Any]]:
+    async def get_recent_videos(self, limit: int = 10) -> List[Dict[str, Any]]:
         """Get recent videos specifically for empty queries"""
         try:
             projection = {
@@ -326,7 +326,7 @@ class Database:
             logger.error(f"Error logging search query: {e}")
             return False
     
-    async async def get_top_searched_movies(self, limit: int = 10) -> List[Dict[str, Any]]:
+    async def get_top_searched_movies(self, limit: int = 10) -> List[Dict[str, Any]]:
         """Get top searched movie queries"""
         try:
             search_logs_collection = self.db["search_logs"]
@@ -398,7 +398,7 @@ class Database:
             logger.error(f"Error logging not found search: {e}")
             return False
     
-    async async def get_most_searched_not_found(self, limit: int = 10) -> List[Dict[str, Any]]:
+    async def get_most_searched_not_found(self, limit: int = 10) -> List[Dict[str, Any]]:
         """Get most searched queries that returned no results"""
         try:
             not_found_collection = self.db["not_found_searches"]
