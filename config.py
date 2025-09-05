@@ -18,7 +18,7 @@ class Config:
     
     # Bot configuration
     ADMINS = [int(x) for x in os.getenv("ADMINS", "").split() if x.strip()]
-    CHANNELS = [int(x) for x in os.getenv("CHANNELS", "").split() if x.strip()]
+    CHANNELS = [int(x) for x in os.getenv("CHANNELS", "1001981747992").split() if x.strip()]
     AUTH_CHANNEL = int(os.getenv("AUTH_CHANNEL", "0")) if os.getenv("AUTH_CHANNEL") else None
     AUTH_USERS = [int(x) for x in os.getenv("AUTH_USERS", "").split() if x.strip()]
     
