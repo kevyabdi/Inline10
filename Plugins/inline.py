@@ -54,27 +54,33 @@ async def inline_query_handler(client: Client, query: InlineQuery):
         await query.answer(results=results, cache_time=0, is_personal=True)
         return
 
-    # ✅ Empty query → show recent videos
+    # ✅ Empty query → show recent media (all types)
     if not search_query:
         try:
-            recent_videos = await client.db.get_recent_videos(limit=10)
+            # Use recent_media instead of just videos to avoid content type issues
+            recent_media = await client.db.get_recent_media(limit=15)
             results = []
-            if recent_videos:
-                for idx, media in enumerate(recent_videos):
-                    result = create_inline_result(media, idx)
-                    if result:
-                        results.append(result)
+            if recent_media:
+                for idx, media in enumerate(recent_media):
+                    try:
+                        result = create_inline_result(media, idx)
+                        if result:
+                            results.append(result)
+                    except Exception as media_error:
+                        # Skip problematic media files and continue
+                        logger.warning(f"Skipped media at index {idx}: {media_error}")
+                        continue
 
             if not results:
                 results = [
                     InlineQueryResultArticle(
-                        id="no_videos",
-                        title="🎬 No Recent Videos",
-                        description="Upload videos to channels to see them here",
+                        id="no_media",
+                        title="📁 No Recent Media",
+                        description="Upload media to channels to see them here",
                         input_message_content=InputTextMessageContent(
-                            "🎬 <b>No recent videos found</b>\n\n"
-                            "Recent videos will appear here when you upload them.\n"
-                            "Type a search term to find content."
+                            "📁 <b>No recent media found</b>\n\n"
+                            "Recent media will appear here when you upload them.\n"
+                            "Type a search term to find specific content."
                         )
                     )
                 ]
@@ -83,15 +89,15 @@ async def inline_query_handler(client: Client, query: InlineQuery):
             return
 
         except Exception as e:
-            logger.error(f"Error getting recent videos: {e}")
+            logger.error(f"Error getting recent media: {e}")
             results = [
                 InlineQueryResultArticle(
                     id="error_fallback",
-                    title="🔍 Search Your Videos",
-                    description="Type to search your video collection",
+                    title="🔍 Search Your Media",
+                    description="Type to search your media collection",
                     input_message_content=InputTextMessageContent(
-                        "🔍 <b>Search your videos</b>\n\n"
-                        "Type your search query to find specific videos."
+                        "🔍 <b>Search your media</b>\n\n"
+                        "Type your search query to find specific content."
                     )
                 )
             ]
@@ -180,14 +186,24 @@ def create_inline_result(media: dict, index: int):
                     InlineKeyboardButton("📢 Join", url="https://t.me/daawotv")
                 ]
             ])
-            return InlineQueryResultCachedVideo(
-                id=f"video_{index}",
-                video_file_id=file_id,
-                title=title,
-                description=description,
-                caption=f"{file_name}\n\nKUSO BIIT @DAAWOTV",
-                reply_markup=keyboard
-            )
+            try:
+                return InlineQueryResultCachedVideo(
+                    id=f"video_{index}",
+                    video_file_id=file_id,
+                    title=title,
+                    description=description,
+                    caption=f"{file_name}\n\nKUSO BIIT @DAAWOTV",
+                    reply_markup=keyboard
+                )
+            except Exception as video_error:
+                # If video fails due to content type issues, fallback to document
+                logger.warning(f"Video inline result failed, falling back to document: {video_error}")
+                return InlineQueryResultCachedDocument(
+                    id=f"doc_fallback_{index}",
+                    title=f"📄 {display_name}",
+                    description=description,
+                    document_file_id=file_id
+                )
 
         elif file_type == "document":
             return InlineQueryResultCachedDocument(
