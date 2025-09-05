@@ -150,11 +150,19 @@ async def inline_query_handler(client: Client, query: InlineQuery):
 
 def create_inline_result(media: dict, index: int):
     """Create inline result based on media type"""
-    file_type = media.get("file_type")
+    file_type = media.get("file_type", "document")
     file_name = media.get("file_name", "Unknown")
     file_size = media.get("file_size", 0)
     caption = media.get("caption", "")
     file_id = media.get("file_id")
+    
+    # Validate required fields
+    if not file_id:
+        logger.error(f"Missing file_id for media at index {index}")
+        return None
+    
+    if not file_type:
+        file_type = "document"
 
     display_name = file_name if len(file_name) <= 50 else file_name[:47] + "..."
     description = format_file_size(file_size) if file_size else "Unknown size"
@@ -192,8 +200,7 @@ def create_inline_result(media: dict, index: int):
         elif file_type == "audio":
             return InlineQueryResultCachedAudio(
                 id=f"audio_{index}",
-                audio_file_id=file_id,
-                title=title
+                audio_file_id=file_id
             )
 
         elif file_type == "photo":
