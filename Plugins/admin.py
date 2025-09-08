@@ -78,9 +78,14 @@ async def broadcast_command(client: Client, message: Message):
         await message.reply("❌ Reply to a message to broadcast it.")
         return
     
-    # Get all unique user IDs from database (if you store user data)
-    # For now, we'll use a simple approach with AUTH_USERS
-    users = Config.AUTH_USERS + Config.ADMINS
+    # Get all user IDs from database who have used /start
+    all_users = await client.db.get_all_user_ids()
+    
+    # Filter out banned users
+    users = []
+    for user_id in all_users:
+        if not await client.db.is_banned(user_id):
+            users.append(user_id)
     
     if not users:
         await message.reply("❌ No users found to broadcast to.")
