@@ -279,6 +279,19 @@ class Database:
             logger.error(f"Error getting user count: {e}")
             return 0
     
+    async def get_all_user_ids(self) -> List[int]:
+        """Get all user IDs from the database for broadcasting"""
+        try:
+            users_collection = self.db["users"]
+            cursor = users_collection.find({}, {"user_id": 1})
+            user_ids = []
+            async for user in cursor:
+                user_ids.append(user["user_id"])
+            return user_ids
+        except Exception as e:
+            logger.error(f"Error getting all user IDs: {e}")
+            return []
+    
     async def add_user(self, user_id: int, username: str = None, first_name: str = None) -> bool:
         """Add user to database"""
         try:
