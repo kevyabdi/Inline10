@@ -1,17 +1,19 @@
 from flask import Flask
 import threading
+import os
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "✅ Bot is running fine on Replit!"
+    return "✅ Bot is running fine on Render!"
 
 def run():
-    # Replit expects app to bind on port 5000
-    app.run(host="0.0.0.0", port=5000)
+    # Render waxay ku siisaa port environment variable
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
 
 def keep_alive():
     t = threading.Thread(target=run)
-    t.daemon = True   # si uu u socdo background
+    t.daemon = True   # background thread
     t.start()
