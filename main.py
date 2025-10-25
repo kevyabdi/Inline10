@@ -29,7 +29,7 @@ async def main():
         # Initialize and start the bot
         bot = MediaSearchBot()
         await bot.start()
-        logger.info("✅ Bot started successfully!")
+        logger.info("✅ Bot Started successfully!")
 
         # Keep running
         await idle()
